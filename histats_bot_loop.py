@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 import time
 import random
@@ -24,13 +25,14 @@ def run_bot(visitor_id):
     options.add_argument("--no-sandbox")
     options.add_argument(f"user-agent={user_agent}")
 
-    driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+    service = Service(ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=service, options=options)
 
     try:
         print(f"[{visitor_id}] Membuka: {TARGET_URL} dengan UA: {user_agent}")
         driver.get(TARGET_URL)
 
-        # Tunggu JS dan scroll (penting agar terhitung)
+        # Tunggu supaya Histats jalan dengan JS
         time.sleep(random.randint(6, 12))
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         time.sleep(random.randint(2, 5))
@@ -43,7 +45,6 @@ def run_bot(visitor_id):
     finally:
         driver.quit()
 
-# Jalankan bot dalam loop
 for i in range(1, TOTAL_VISITORS + 1):
     run_bot(i)
     wait = random.randint(5, 15)
