@@ -12,8 +12,8 @@ user_agents = [
     "Mozilla/5.0 (iPhone; CPU iPhone OS 15_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.2 Mobile/15E148 Safari/604.1"
 ]
 
-TARGET_URL = "https://c4up.me"  # Ganti dengan URL milikmu
-TOTAL_VISITORS = 10             # Ganti sesuai jumlah yang diinginkan
+TARGET_URL = "https://c4up.me"  # Ganti dengan URL kamu
+TOTAL_VISITORS = 10             # Jumlah kunjungan yang diinginkan
 
 def run_bot(visitor_id):
     user_agent = random.choice(user_agents)
@@ -25,6 +25,9 @@ def run_bot(visitor_id):
     options.add_argument("--no-sandbox")
     options.add_argument(f"user-agent={user_agent}")
 
+    # Lokasi binary Chromium, sesuaikan kalau berbeda
+    options.binary_location = "/usr/bin/chromium-browser"
+
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=options)
 
@@ -32,7 +35,7 @@ def run_bot(visitor_id):
         print(f"[{visitor_id}] Membuka: {TARGET_URL} dengan UA: {user_agent}")
         driver.get(TARGET_URL)
 
-        # Tunggu supaya Histats jalan dengan JS
+        # Tunggu supaya Histats jalan dengan JavaScript
         time.sleep(random.randint(6, 12))
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         time.sleep(random.randint(2, 5))
